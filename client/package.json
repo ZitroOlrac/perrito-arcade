@@ -11,7 +11,9 @@
     "test": "vitest run",
     "typecheck": "tsc -b",
     "format": "prettier --write src",
-    "format:check": "prettier --check src"
+    "format:check": "prettier --check src",
+    "demo": "vite --config vite.demo.config.ts",
+    "build:demo": "tsc -b && vite build --config vite.demo.config.ts"
   },
   "dependencies": {
     "phaser": "^3.90.0",

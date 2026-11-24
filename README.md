@@ -1,5 +1,7 @@
 # Perrito Arcade
 
+**▶ Jugar ahora: https://zitroolrac.github.io/perrito-arcade/** (versión de demostración, ver más abajo)
+
 Plataforma de minijuegos para el navegador con cuentas, ranking en tiempo real y validación de puntuaciones en el servidor. Tiene dos juegos:
 
 - **Perrito Run**: un runner en el que el perro de mi empresa corre por un taller esquivando neumáticos, cajas de herramientas y lámparas.
@@ -91,6 +93,18 @@ docker compose --profile full up --build
 ```
 
 Y se abre en http://localhost:4000 (el servidor sirve también el frontend compilado).
+
+### Versión de demostración (sin servidor)
+
+La versión completa necesita Node y PostgreSQL. Para que se pueda probar con un clic hay también una versión estática publicada en GitHub Pages con **Perrito Run** y el **duelo contra Perrobot**, que funciona entera en el navegador (el récord se guarda en `localStorage`).
+
+El duelo de la demo usa **el mismo motor y el mismo bot que el servidor** (`server/src/duel/engine.ts` y `bot.ts`), importados directamente desde el cliente: no hay una copia aparte. Lo único que cambia es de dónde llegan los estados (`client/src/duel/localDuel.ts` hace de servidor dentro del navegador).
+
+```bash
+cd client
+npm run demo          # http://localhost:5173/perrito-arcade/demo.html
+npm run build:demo    # genera dist-demo/, lo que se publica en GitHub Pages
+```
 
 ## Tests
 

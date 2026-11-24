@@ -9,7 +9,17 @@ interface Props {
   initial: DuelSnapshot | null;
   serverNow: () => number;
   onHit: (boltId: number) => Promise<HitResult>;
+  /** de dónde llegan los estados; por defecto, del socket (en la demo, del duelo local) */
+  subscribe?: (fn: (s: DuelSnapshot) => void) => () => void;
 }
+
+const fromSocket = (fn: (s: DuelSnapshot) => void) => {
+  const socket = getSocket();
+  socket.on('duel:state', fn);
+  return () => {
+    socket.off('duel:state', fn);
+  };
+};
 
 /**
  * Envoltorio de React para la escena del duelo. Se monta una vez por partida.
@@ -19,7 +29,7 @@ interface Props {
  * así que si dos estados caían en el mismo render se perdían los eventos del
  * primero (un tornillo ganado se veía como caducado).
  */
-export function DuelBoard({ you, initial, serverNow, onHit }: Props) {
+export function DuelBoard({ you, initial, serverNow, onHit, subscribe = fromSocket }: Props) {
   const container = useRef<HTMLDivElement>(null);
   const props = useRef({ serverNow, onHit });
 
@@ -32,13 +42,11 @@ export function DuelBoard({ you, initial, serverNow, onHit }: Props) {
     let game: Phaser.Game | null = null;
     let ready = false;
     const pending: DuelSnapshot[] = initial ? [{ ...initial, events: [] }] : [];
-    const socket = getSocket();
-
     const onState = (s: DuelSnapshot) => {
       if (ready && game) game.events.emit('duel:state', s);
       else pending.push(s);
     };
-    socket.on('duel:state', onState);
+    const unsubscribe = subscribe(onState);
 
     import('../game/duel/createDuelGame').then(({ createDuelGame }) => {
       if (cancelled || !container.current) return;
@@ -59,7 +67,7 @@ export function DuelBoard({ you, initial, serverNow, onHit }: Props) {
 
     return () => {
       cancelled = true;
-      socket.off('duel:state', onState);
+      unsubscribe();
       game?.destroy(true);
     };
     // la key del componente cambia con cada partida: `you` e `initial` no cambian en su vida

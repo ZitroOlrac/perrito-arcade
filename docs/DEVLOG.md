@@ -113,3 +113,15 @@ El test tocaba el primer tornillo nada más aparecer y a veces el servidor lo re
 ### Números en español
 
 Un test esperaba "Faltan 1.800" y la web ponía "Faltan 1800". Resulta que `Intl.NumberFormat('es-ES')` no pone el punto en los números de 4 cifras, que es lo que dice la RAE. Lo correcto era el test.
+
+---
+
+# Demo jugable en GitHub Pages
+
+Quería que se pudiera jugar desde mi portafolio sin montar un servidor. Como el motor del duelo no depende de nada de Node (lo hice así para poder testearlo), el cliente lo importa tal cual desde `server/src/duel` y lo ejecuta en el navegador con el bot. El tablero del duelo (`DuelBoard`) ahora recibe de dónde vienen los estados: del socket en la web completa o del duelo local en la demo.
+
+Para poder importarlo tuve que quitar los `private` en los parámetros del constructor del motor y del bot: el tsconfig del cliente tiene `erasableSyntaxOnly` y no los acepta.
+
+### La barra de progreso del duelo había desaparecido
+
+Probando la demo vi que tu barra de puntos no salía. La causa era una regla `.me { display: inline-flex }` que añadí en la fase 3 para el nombre de la cabecera: el marcador del duelo también tiene la clase `me` y dejaba de ser un grid. Llevaba roto desde entonces también en la web completa. Lo arreglé limitando la regla a `.session .me`. Me lo apunto: clases genéricas como `me` o `active` siempre con un selector más concreto.

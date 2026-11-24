@@ -10,11 +10,17 @@ export class DuelBot {
   private plans = new Map<number, number>();
   private busyUntil = 0;
 
-  constructor(
-    private side: Side,
-    private skill = 0.75, // 0..1
-    private random: () => number = Math.random,
-  ) {}
+  // sin "parameter properties" (private en el constructor) para que el cliente pueda
+  // importar este mismo fichero en la demo sin servidor (su tsconfig no las permite)
+  private side: Side;
+  private skill: number;
+  private random: () => number;
+
+  constructor(side: Side, skill = 0.75, random: () => number = Math.random) {
+    this.side = side;
+    this.skill = skill; // 0..1
+    this.random = random;
+  }
 
   act(engine: DuelEngine, now: number) {
     if (engine.phase !== 'playing' || now < this.busyUntil) return;

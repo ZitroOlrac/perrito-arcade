@@ -93,11 +93,10 @@ export class DuelEngine {
   private pendingEvents: DuelEvent[] = [];
   private recentHits: Record<Side, number[]> = { a: [], b: [] };
 
-  constructor(
-    now: number,
-    private random: () => number = Math.random,
-    countdownMs: number = RULES.countdownMs,
-  ) {
+  private random: () => number;
+
+  constructor(now: number, random: () => number = Math.random, countdownMs: number = RULES.countdownMs) {
+    this.random = random;
     this.startsAt = now + countdownMs;
     this.endsAt = this.startsAt + RULES.durationMs;
     this.nextSpawnAt = this.startsAt;

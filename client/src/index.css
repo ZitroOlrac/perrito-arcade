@@ -1144,7 +1144,8 @@ th {
   text-decoration: none;
   border-color: var(--accent);
 }
-.me {
+/* solo el nombre de la cabecera: con .me a secas se colaba en el marcador del duelo */
+.session .me {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -1291,7 +1292,7 @@ th {
   .wallet {
     padding: 2px 8px;
   }
-  .me svg {
+  .session .me svg {
     display: none;
   }
 }
@@ -1304,4 +1305,18 @@ th {
   background: linear-gradient(to bottom, #2a3038 76%, var(--yellow) 76%, var(--yellow) 80%, #5d6168 80%);
   border: 1px solid var(--line);
   flex: 0 0 auto;
+}
+
+/* ---------- demo estática ---------- */
+
+.demo-note {
+  max-width: 980px;
+  margin: 24px auto 0;
+}
+.demo-help {
+  margin-top: 10px;
+}
+.nav a[aria-selected='true'] {
+  color: var(--text);
+  background: var(--card);
 }

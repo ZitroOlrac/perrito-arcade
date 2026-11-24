@@ -6,6 +6,7 @@ import { getSocket } from '../realtime';
 import { useDuel, useServerClock, type DuelState } from '../duel/useDuel';
 import { other, type EndPayload, type MatchInfo } from '../duel/types';
 import { DuelBoard } from '../components/DuelBoard';
+import { PlayerScore } from '../components/PlayerScore';
 import { DogLogo } from '../components/DogLogo';
 import { sfx } from '../game/sound';
 import { timeAgo } from '../format';
@@ -406,32 +407,6 @@ function MatchView({ state, match, serverNow, rtt, actions }: MatchProps) {
           </button>
         </div>
       )}
-    </div>
-  );
-}
-
-function PlayerScore(props: {
-  name: string;
-  rating: number;
-  score: number;
-  target: number;
-  side: 'me' | 'rival';
-  bot?: boolean;
-}) {
-  const pct = Math.min(100, (props.score / props.target) * 100);
-  return (
-    <div className={`player-score ${props.side}`}>
-      <div className="player-line">
-        <span className="player-name">
-          {props.name}
-          {props.bot ? ' 🤖' : ''}
-        </span>
-        <span className="muted small">{props.bot ? 'práctica' : `ELO ${props.rating}`}</span>
-      </div>
-      <div className="player-bar">
-        <i style={{ width: `${pct}%` }} />
-      </div>
-      <span className="player-points mono">{props.score}</span>
     </div>
   );
 }
